@@ -4,8 +4,10 @@ RUN pip install torch
 
 RUN pip install fastapi uvicorn transformers
 
-EXPOSE 80
+EXPOSE 3000
+
+# WORKDIR /app
 
 COPY ./app /app
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8005"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "3000"]

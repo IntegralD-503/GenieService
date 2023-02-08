@@ -12,7 +12,14 @@ from transformers import pipeline
 model_name = 'distilbert-base-cased-distilled-squad'
 model = pipeline(model=model_name, tokenizer=model_name, task='question-answering')
 
+@app.get("/health_check", status_code=200)
+async def health():
+    return "ok"
+
 @app.post("/question_answering")
 async def qa(input_data: QADataModel):
     result = model(question = input_data.question, context=input_data.context)
     return {"answer": result["answer"]}
+
+# if __name__ == '__main__': 
+#     uvicorn.run('main:app', workers=1) 
