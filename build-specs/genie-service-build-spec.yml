@@ -1,8 +1,6 @@
 version: 0.2
 phases:
   install:
-    runtime-versions:
-      docker: 18
     commands:
       - docker --version
       # Upgrade AWS CLI to the latest version
