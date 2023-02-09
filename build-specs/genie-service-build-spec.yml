@@ -9,7 +9,7 @@ phases:
   pre_build:
     commands:
       # Discover and run unit tests in the 'tests' directory
-      - $(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
       - REPOSITORY_URI=784627546023.dkr.ecr.us-east-1.amazonaws.com/genie-service
       - CONTAINER_NAME=genie-service
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
