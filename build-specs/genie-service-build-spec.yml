@@ -9,7 +9,9 @@ phases:
   pre_build:
     commands:
       # Discover and run unit tests in the 'tests' directory
-      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      # - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - REPOSITORY_URI=784627546023.dkr.ecr.us-east-1.amazonaws.com/genie-service
       - CONTAINER_NAME=genie-service
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
@@ -17,11 +19,15 @@ phases:
   build:
     commands:
       # Build
+      - echo Build started on `date`
+      - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
       # Post Build
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Write the image definitions file for ECS
